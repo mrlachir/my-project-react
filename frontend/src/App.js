@@ -18,6 +18,8 @@ function App() {
     <div className="App">
       <h1>{message}</h1>
       <h1>Frontend is working</h1>
+      <h1>Frontend is working</h1>
+      <h1>Frontend is working</h1>
     </div>
   );
 }
