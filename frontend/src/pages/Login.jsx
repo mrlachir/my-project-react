@@ -14,26 +14,39 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({}); // Clear previous errors
-    setIsLoading(true);
+    setErrors({}); // Clear previous errors (if any)
+    setIsLoading(true); // Set loading state to true
 
     try {
       const response = await API.post("/auth/login", formData);
       const { token, user } = response.data;
 
-      // Save token to localStorage or a secure cookie
+      // Save token to localStorage
       localStorage.setItem("token", token);
 
-      // Redirect to the profile or home page
+      // Optionally, store the user's data (e.g., name, email)
+      localStorage.setItem("user", JSON.stringify(user));
+
+      // Redirect to the profile page (or dashboard)
       navigate("/profile");
     } catch (error) {
-      setIsLoading(false);
+      setIsLoading(false); // Set loading state to false on error
 
-      if (error.response && error.response.status === 401) {
-        setErrors({ server: "Invalid email or password." });
-      } else if (error.response) {
-        setErrors({ server: error.response.data.message });
+      // Check if the error response exists and handle based on the status code
+      if (error.response) {
+        if (error.response.status === 401) {
+          // If it's a 401 Unauthorized error (invalid credentials)
+          setErrors({ server: "Invalid email or password." });
+        } else {
+          // Handle other errors returned from the server
+          setErrors({
+            server:
+              error.response.data.message ||
+              "An error occurred. Please try again later.",
+          });
+        }
       } else {
+        // For any network or unexpected errors (e.g., no internet)
         setErrors({ server: "Something went wrong. Please try again later." });
       }
     }

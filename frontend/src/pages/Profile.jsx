@@ -1,44 +1,35 @@
-import React, { useState } from "react";
-import API from "../utils/api";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Profile = () => {
-  const [profileInfo, setProfileInfo] = useState({ name: "", email: "", bio: "" });
+const ProfilePage = () => {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
-  const fetchProfile = async () => {
-    try {
-      const { data } = await API.get("/profile");
-      setProfileInfo(data);
-    } catch (error) {
-      console.error("Error fetching profile:", error);
+  useEffect(() => {
+    // Check if there's a valid token in localStorage
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      // If no token, redirect to login page
+      navigate("/login");
+    } else {
+      // Optionally: Verify the token on the backend (by sending a request to a protected route)
+      // You can also store user details in localStorage during login for easy access
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      if (storedUser) {
+        setUser(storedUser);
+      }
     }
-  };
+  }, [navigate]);
 
-  const handleUpdate = async () => {
-    try {
-      const { data } = await API.put("/profile", profileInfo);
-      console.log("Profile updated:", data);
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    }
-  };
+  if (!user) return <div>Loading...</div>;
 
   return (
     <div>
-      <h1>Profile</h1>
-      <input
-        type="text"
-        value={profileInfo.name}
-        onChange={(e) => setProfileInfo({ ...profileInfo, name: e.target.value })}
-        placeholder="Name"
-      />
-      <textarea
-        value={profileInfo.bio}
-        onChange={(e) => setProfileInfo({ ...profileInfo, bio: e.target.value })}
-        placeholder="Bio"
-      />
-      <button onClick={handleUpdate}>Update Profile</button>
+      <h1>Welcome {user.name}</h1>
+      <p>Email: {user.email}</p>
     </div>
   );
 };
 
-export default Profile;
+export default ProfilePage;
