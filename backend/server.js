@@ -1,28 +1,30 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
+const authRoutes = require('./routes/auth');
+const travelRoutes = require('./routes/travel');
+const reviewRoutes = require('./routes/review'); // Add this line
+const bookingRoutes = require('./routes/booking'); // add booking routes here
+// server.js
+const profileRoutes = require('./routes/profile'); // add profile routes here
+dotenv.config();
 
-// Initialize app
 const app = express();
+
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.log(err));
+app.use('/auth', authRoutes);
+app.use('/travels', travelRoutes);
+app.use('/reviews', reviewRoutes); // Add this line to handle reviews
+app.use('/bookings', bookingRoutes); // add the booking routes
+app.use('/profile', profileRoutes); // add profile routes
 
-// Sample Route
-app.get('/', (req, res) => {
-    res.send('Backend is running');
-});
-
-// Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => app.listen(PORT, () => console.log(`Server running on port ${PORT}`)))
+  .catch((err) => console.error(err));
