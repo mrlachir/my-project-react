@@ -1,10 +1,10 @@
-// routes/profile.js
 const express = require('express');
-const router = express.Router();
 const { updateProfile } = require('../controllers/profileController');
-const authMiddleware = require('../middleware/authenticateUser'); // assuming you have authentication middleware
+const authenticateUser = require('../middleware/authenticateUser');
 
-// Update user profile info (PUT /profile)
-router.put('/', authMiddleware, updateProfile);
+const router = express.Router();
+
+// Route to update the user profile
+router.patch('/', authenticateUser, updateProfile);
 
 module.exports = router;

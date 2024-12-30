@@ -1,4 +1,3 @@
-// controllers/profileController.js
 const User = require('../models/User');
 
 const updateProfile = async (req, res) => {
@@ -12,7 +11,7 @@ const updateProfile = async (req, res) => {
     // Update the user details
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-    
+
     // Save the updated user information
     await user.save();
 
@@ -21,8 +20,8 @@ const updateProfile = async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
-      }
+        email: user.email,
+      },
     });
   } catch (err) {
     return res.status(500).json({ message: 'Error updating profile', error: err.message });
