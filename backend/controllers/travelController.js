@@ -141,10 +141,24 @@ const deleteTravel = async (req, res) => {
   }
 };
 
+
+// Get recommended travels (for example, top 5 most popular or rated)
+const getRecommendedTravels = async (req, res) => {
+  try {
+    // Example: Fetching top 5 most popular (or highly rated) travels
+    const recommendedTravels = await Travel.find().sort({ price: 1 }).limit(5); // Adjust based on your logic (e.g., sort by rating, price, etc.)
+    return res.status(200).json(recommendedTravels);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+
 module.exports = {
   createTravel,
   getAllTravels,
   getTravelById,
   updateTravel,
   deleteTravel,
+  getRecommendedTravels,
 };

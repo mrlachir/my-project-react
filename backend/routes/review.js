@@ -9,3 +9,4 @@ router.post('/', authenticateUser, createReview); // Create a review
 router.get('/:id', getReviewsByTravel); // Get all reviews for a specific travel by ID
 
 module.exports = router;
+

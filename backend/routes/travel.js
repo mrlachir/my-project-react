@@ -6,6 +6,7 @@ const {
   getTravelById,
   updateTravel,
   deleteTravel,
+  getRecommendedTravels ,
 } = require('../controllers/travelController');
 
 const router = express.Router();
@@ -15,5 +16,6 @@ router.get('/', getAllTravels); // Get all travels (with search and filter)
 router.get('/:id', getTravelById); // Get a specific travel by ID
 router.put('/:id', updateTravel); // Update a travel by ID
 router.delete('/:id', deleteTravel); // Delete a travel by ID
+router.get("/recommended", getRecommendedTravels); // Fetch recommended travels
 
 module.exports = router;

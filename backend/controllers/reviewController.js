@@ -1,6 +1,7 @@
 const Review = require('../models/Review');
 const Travel = require('../models/Travel');
 
+// Create a new review
 const createReview = async (req, res) => {
   try {
     const { travelId, rating, comment } = req.body;
@@ -11,10 +12,10 @@ const createReview = async (req, res) => {
       return res.status(404).json({ message: 'Travel not found' });
     }
 
-    // Create a new review
+    // Create the review
     const review = new Review({
-      user: req.user.id, // The user ID from the JWT token (authenticated user)
-      travel: travelId,  // The travel ID passed in the request body
+      user: req.user.id,  // Assuming user ID is from the authenticated JWT token
+      travel: travelId,
       rating,
       comment,
     });
@@ -22,9 +23,9 @@ const createReview = async (req, res) => {
     // Save the review
     await review.save();
 
-    // Add the review to the travel document's reviews array
-    travel.reviews.push(review._id); // Push the new review ID into the reviews array
-    await travel.save(); // Save the updated travel document
+    // Add the review to the travel's reviews array
+    travel.reviews.push(review._id);
+    await travel.save();
 
     return res.status(201).json({
       message: 'Review created successfully',
@@ -35,10 +36,11 @@ const createReview = async (req, res) => {
   }
 };
 
+// Get all reviews for a specific travel
 const getReviewsByTravel = async (req, res) => {
   try {
     const travelId = req.params.id;
-    const reviews = await Review.find({ travel: travelId }).populate('user', 'name');
+    const reviews = await Review.find({ travel: travelId }).populate('user', 'name'); // Populate user info
 
     return res.status(200).json({ reviews });
   } catch (err) {
