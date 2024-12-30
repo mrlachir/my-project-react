@@ -1,3 +1,4 @@
+// models/Travel.js
 const mongoose = require('mongoose');
 
 // Define the travel schema
@@ -17,7 +18,7 @@ const travelSchema = new mongoose.Schema({
   availableDates: [Date],
   reviews: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Review' // Reference to the Review model
+    ref: 'Review', // Reference to the Review model
   }]
 }, { timestamps: true });
 

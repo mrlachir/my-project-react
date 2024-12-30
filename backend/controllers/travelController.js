@@ -22,15 +22,76 @@ const createTravel = async (req, res) => {
   }
 };
 
-// Get all travels
+// // Get all travels with search and filter
+// const getAllTravels = async (req, res) => {
+//   const { search, minPrice, maxPrice, startDate, endDate } = req.query; // Extract query parameters
+
+//   try {
+//     let query = {};
+
+//     // Search by name or description (case-insensitive)
+//     if (search) {
+//       query.$or = [
+//         { name: { $regex: search, $options: 'i' } },  // Name search
+//         { description: { $regex: search, $options: 'i' } }  // Description search
+//       ];
+//     }
+
+//     // Filter by price range if both minPrice and maxPrice are provided
+//     if (minPrice && maxPrice) {
+//       query.price = { $gte: Number(minPrice), $lte: Number(maxPrice) };
+//     }
+
+//     // Filter by available dates (if provided)
+//     if (startDate && endDate) {
+//       query.availableDates = { 
+//         $gte: new Date(startDate), // Start date filter
+//         $lte: new Date(endDate)    // End date filter
+//       };
+//     }
+
+//     // Fetch travels based on query
+//     const travels = await Travel.find(query);
+
+//     return res.status(200).json(travels);
+//   } catch (error) {
+//     return res.status(500).json({ message: error.message });
+//   }
+// };
+// Get all travels with filters
 const getAllTravels = async (req, res) => {
   try {
-    const travels = await Travel.find();
+    const { search, minPrice, maxPrice, startDate, endDate } = req.query;
+
+    let filterConditions = {};
+
+    if (search) {
+      filterConditions.$or = [
+        { name: { $regex: search, $options: "i" } }, // Search by name
+        { description: { $regex: search, $options: "i" } } // Search by description
+      ];
+    }
+
+    if (minPrice) {
+      filterConditions.price = { ...filterConditions.price, $gte: minPrice };
+    }
+
+    if (maxPrice) {
+      filterConditions.price = { ...filterConditions.price, $lte: maxPrice };
+    }
+
+    if (startDate && endDate) {
+      filterConditions.availableDates = { $gte: new Date(startDate), $lte: new Date(endDate) };
+    }
+
+    const travels = await Travel.find(filterConditions);
+
     return res.status(200).json(travels);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
+
 
 // Get travel by ID
 const getTravelById = async (req, res) => {
