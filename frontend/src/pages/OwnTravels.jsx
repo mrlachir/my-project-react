@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import API from '../utils/api';
+import API from '../utils/api'; // Use your Axios instance
 
 const OwnTravels = () => {
   const [travels, setTravels] = useState([]);
   const [formData, setFormData] = useState({ name: '', description: '', price: '', startDate: '', endDate: '' });
   const [editingTravelId, setEditingTravelId] = useState(null);
 
-  // Fetch all travels
+  // Fetch only the user's travels
   useEffect(() => {
-    API.get('/travels') // Fetch travels using the backend endpoint
+    // API.get('/owntravels') // Use the user-specific endpoint
+    API.get('/travels/owntravels') // Use the user-specific endpoint
       .then((response) => setTravels(response.data))
-      .catch((err) => console.error('Error fetching travels:', err));
+      .catch((err) => console.error('Error fetching user travels:', err));
   }, []);
 
   // Handle form submission for creating or updating travels
   const handleSave = (e) => {
     e.preventDefault();
 
-    // Validate form data
     if (!formData.name || !formData.description || !formData.price || !formData.startDate || !formData.endDate) {
       console.error('All fields are required.');
       return;
@@ -57,8 +57,8 @@ const OwnTravels = () => {
       name: travel.name,
       description: travel.description,
       price: travel.price.toString(),
-      startDate: travel.availableDates[0], // Extract the start date
-      endDate: travel.availableDates[1], // Extract the end date
+      startDate: travel.availableDates[0],
+      endDate: travel.availableDates[1],
     });
   };
 

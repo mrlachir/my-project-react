@@ -1,6 +1,26 @@
 const Travel = require('../models/Travel');
 
 // Create a travel
+// const createTravel = async (req, res) => {
+//   const { name, description, price, availableDates } = req.body;
+
+//   if (!name || !description || !price || !availableDates || availableDates.length === 0) {
+//     return res.status(400).json({ message: 'Name, description, price, and availableDates are required.' });
+//   }
+
+//   try {
+//     const newTravel = new Travel({
+//       name,
+//       description,
+//       price,
+//       availableDates,
+//     });
+//     await newTravel.save();
+//     return res.status(201).json(newTravel);
+//   } catch (error) {
+//     return res.status(500).json({ message: error.message });
+//   }
+// };
 const createTravel = async (req, res) => {
   const { name, description, price, availableDates } = req.body;
 
@@ -14,6 +34,7 @@ const createTravel = async (req, res) => {
       description,
       price,
       availableDates,
+      createdBy: req.user.id, // Associate the travel with the logged-in user
     });
     await newTravel.save();
     return res.status(201).json(newTravel);
@@ -153,6 +174,16 @@ const getRecommendedTravels = async (req, res) => {
   }
 };
 
+const getUserTravels = async (req, res) => {
+  try {
+    const travels = await Travel.find({ createdBy: req.user.id }); // Filter travels by user ID
+    res.status(200).json(travels);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching user travels.' });
+  }
+};
+
+
 
 module.exports = {
   createTravel,
@@ -161,4 +192,5 @@ module.exports = {
   updateTravel,
   deleteTravel,
   getRecommendedTravels,
+  getUserTravels,
 };
