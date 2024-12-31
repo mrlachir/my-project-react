@@ -62,47 +62,53 @@ const updateProfile = async (req, res) => {
   }
 };
 
-
 const bcrypt = require('bcryptjs');
 
 const updatePassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
 
+  // Validate request body
   if (!oldPassword || !newPassword) {
-    console.error('Missing old or new password.');
+    // console.error('Missing old or new password.');
     return res.status(400).json({ message: 'Both old and new passwords are required.' });
   }
 
+  if (newPassword.length < 6) {
+    // console.error('New password too short.');
+    return res.status(400).json({ message: 'New password must be at least 6 characters long.' });
+  }
+
   try {
-    console.log('User ID:', req.user.id); // Log user ID from the middleware
+    // Fetch the user from the database
     const user = await User.findById(req.user.id);
     if (!user) {
-      console.error('User not found:', req.user.id);
+      // console.error('User not found:', req.user.id);
       return res.status(404).json({ message: 'User not found.' });
     }
 
-    console.log('Old Password:', oldPassword); // Log old password
-    console.log('Stored Password (hashed):', user.password); // Log stored password
-
-    // Verify old password
+    // Compare old password with the stored hashed password
     const isMatch = await bcrypt.compare(oldPassword, user.password);
-    console.log('Password Match:', isMatch);
     if (!isMatch) {
-      console.error('Old password does not match for user:', req.user.id);
+      // console.error('Old password does not match for user:', req.user.id);
       return res.status(401).json({ message: 'Old password is incorrect.' });
     }
 
-    // Hash and update new password
+    // Hash the new password and update the user's password field
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    console.log('New Hashed Password:', hashedPassword);
     user.password = hashedPassword;
+
+    // Save the updated user document
     await user.save();
 
-    console.log('Password updated successfully for user:', req.user.id);
-    res.status(200).json({ message: 'Password updated successfully.' });
+    // console.log('Password updated successfully for user:', req.user.id);
+    return res.status(200).json({ message: 'Password updated successfully.' });
   } catch (error) {
-    console.error('Error updating password:', error.message); // Log detailed error
-    res.status(500).json({ message: 'Error updating password.' });
+    // Handle database or server errors
+    // console.error('Error updating password:', error.message);
+    return res.status(500).json({
+      message: 'An internal server error occurred while updating the password.',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined, // Include error details in development
+    });
   }
 };
 

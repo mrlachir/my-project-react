@@ -8,36 +8,55 @@ const Profile = () => {
   const [formData, setFormData] = useState({});
   const [passwordForm, setPasswordForm] = useState({ oldPassword: '', newPassword: '' });
   const [passwordUpdating, setPasswordUpdating] = useState(false);
+  const [error, setError] = useState(null); // General error message
+  const [passwordError, setPasswordError] = useState(null); // Password update error
   const navigate = useNavigate();
 
   // Fetch user profile
   useEffect(() => {
     axios.get('/profile')
       .then(response => setUser(response.data))
-      .catch(err => console.error('Error fetching profile:', err));
+      .catch(err => setError('Failed to fetch profile. Please try again.'));
   }, []);
 
   // Handle profile update
   const handleUpdate = (e) => {
     e.preventDefault();
+    setError(null); // Reset error
     axios.patch('/profile', formData)
       .then(response => {
         setUser(response.data.user);
         setEditing(false);
+        alert('Profile updated successfully!');
       })
-      .catch(err => console.error('Error updating profile:', err));
+      .catch(err => {
+        setError('Failed to update profile. Please try again.');
+        console.error('Error updating profile:', err);
+      });
   };
 
   // Handle password update
   const handlePasswordUpdate = (e) => {
     e.preventDefault();
+    setPasswordError(null); // Reset password error
     axios.patch('/profile/password', passwordForm)
       .then(() => {
         alert('Password updated successfully!');
         setPasswordUpdating(false);
         setPasswordForm({ oldPassword: '', newPassword: '' });
       })
-      .catch(err => console.error('Error updating password:', err));
+      .catch(err => {
+        if (err.response?.status === 400) {
+          setPasswordError('New password too short.');
+        } else if (err.response?.status === 401) {
+          setPasswordError('Old password is incorrect.');
+        } else if (err.response?.status === 500) {
+          setPasswordError('An internal server error occurred. Please try again later.');
+        } else {
+          setPasswordError('Failed to update password. Please try again.');
+        }
+        console.error('Error updating password:', err);
+      });
   };
 
   // Logout user
@@ -49,6 +68,7 @@ const Profile = () => {
   return (
     <div>
       <h1>Profile</h1>
+      {error && <p className="error">{error}</p>} {/* Display general errors */}
       {!editing ? (
         <div>
           <p><strong>Name:</strong> {user.name}</p>
@@ -83,6 +103,7 @@ const Profile = () => {
       {passwordUpdating && (
         <form onSubmit={handlePasswordUpdate}>
           <h2>Update Password</h2>
+          {passwordError && <p className="error">{passwordError}</p>} {/* Display password-specific errors */}
           <label>
             Old Password:
             <input
