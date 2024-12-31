@@ -51,52 +51,39 @@ const Travel = () => {
     fetchReviews();
   }, [id]);
 
-  // // Handle booking
-  // const handleBooking = async () => {
-  //   if (!bookingDate) {
-  //     alert("Please select a date.");
-  //     return;
-  //   }
-  //   try {
-  //     const bookingData = {
-  //       travelId: id,
-  //       bookingDate,
-  //     };
-  //     // Make a POST request to the backend to create a booking
-  //     await API.post("/bookings", bookingData);
-  //     alert(`Booking confirmed for ${bookingDate}`);
-  //   } catch (error) {
-  //     console.error("Error booking the travel:", error);
-  //     alert("Error confirming your booking.");
-  //   }
-  // };
-  // Handle booking
-const handleBooking = async () => {
-  if (!bookingDate) {
-    alert("Please select a date.");
-    return;
-  }
-  
-  const bookingData = {
-    travelId: id,  // Ensure the travelId is correct
-    bookingDate: bookingDate,  // Check if bookingDate is formatted correctly
-  };
+  // Add these new state variables at the top with your other useState declarations
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [numberOfPeople, setNumberOfPeople] = useState(1);
 
-  try {
-    // Make a POST request to the backend to create a booking
-    const response = await API.post("/bookings", bookingData);
-    console.log("Booking response:", response);  // Debug the response
-
-    if (response.status === 200) {
-      alert(`Booking confirmed for ${bookingDate}`);
-    } else {
-      alert("Error confirming your booking.");
+  // Update the handleBooking function
+  const handleBooking = async () => {
+    if (!startDate || !endDate || !numberOfPeople) {
+      alert("Please fill in all booking details.");
+      return;
     }
-  } catch (error) {
-    console.error("Error booking the travel:", error);
-    alert("Error confirming your booking.");
-  }
-};
+
+    const bookingData = {
+      travelId: id,
+      startDate: startDate,
+      endDate: endDate,
+      numberOfPeople: parseInt(numberOfPeople),
+    };
+
+    try {
+      const response = await API.post("/bookings", bookingData);
+      console.log("Booking response:", response);
+
+      if (response.status === 201) {
+        alert("Booking confirmed successfully!");
+      } else {
+        alert("Error confirming your booking.");
+      }
+    } catch (error) {
+      console.error("Error booking the travel:", error);
+      alert(error.response?.data?.message || "Error confirming your booking.");
+    }
+  };
 
   const fetchRecommendedTravels = async () => {
     try {
@@ -107,60 +94,36 @@ const handleBooking = async () => {
     }
   };
 
-  // // Handle review submission
-  // const handleSubmitReview = async () => {
-  //   if (!reviewText || rating === "") {
-  //     alert("Please write a review and select a rating.");
-  //     return;
-  //   }
-  //   try {
-  //     const newReview = {
-  //       travelId: id,
-  //       rating,
-  //       comment: reviewText,
-  //     };
-  //     // Send the new review to the backend
-  //     const { data } = await API.post(`/reviews`, newReview);
-  //     // Update the reviews state with the new review
-  //     setReviews([...reviews, data.review]);
-  //     // Clear the form fields
-  //     setReviewText("");
-  //     setRating(5);
-  //   } catch (error) {
-  //     console.error("Error submitting review:", error);
-  //   }
-  // };
   // Handle review submission
-const handleSubmitReview = async () => {
-  if (!reviewText || rating === "") {
-    alert("Please write a review and select a rating.");
-    return;
-  }
-
-  const newReview = {
-    travelId: id,
-    rating,
-    comment: reviewText,
-  };
-
-  try {
-    const response = await API.post(`/reviews`, newReview);
-    console.log("Review response:", response);  // Debug the response
-
-    if (response.status === 200) {
-      setReviews([...reviews, response.data.review]);
-      setReviewText("");  // Clear the review text
-      setRating(5);  // Reset rating to default
-      alert("Review submitted successfully!");
-    } else {
-      alert("Failed to submit your review.");
+  const handleSubmitReview = async () => {
+    if (!reviewText || rating === "") {
+      alert("Please write a review and select a rating.");
+      return;
     }
-  } catch (error) {
-    console.error("Error submitting review:", error);
-    alert("Error submitting your review.");
-  }
-};
 
+    const newReview = {
+      travelId: id,
+      rating,
+      comment: reviewText,
+    };
+
+    try {
+      const response = await API.post(`/reviews`, newReview);
+      console.log("Review response:", response); // Debug the response
+
+      if (response.status === 200) {
+        setReviews([...reviews, response.data.review]);
+        setReviewText(""); // Clear the review text
+        setRating(5); // Reset rating to default
+        alert("Review submitted successfully!");
+      } else {
+        alert("Failed to submit your review.");
+      }
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      alert("Error submitting your review.");
+    }
+  };
 
   return (
     <div>
@@ -179,7 +142,7 @@ const handleSubmitReview = async () => {
           <hr />
 
           {/* Booking Section */}
-          <div>
+          {/* <div>
             <h3>Book Your Trip</h3>
             <input
               type="date"
@@ -188,8 +151,41 @@ const handleSubmitReview = async () => {
             />
             <button onClick={handleBooking}>Book Now</button>
           </div>
-          <hr />
-
+          <hr /> */}
+          {/* Booking Section */}
+          <div>
+            <h3>Book Your Trip</h3>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+            >
+              <div>
+                <label>Start Date: </label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+              </div>
+              <div>
+                <label>End Date: </label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </div>
+              <div>
+                <label>Number of People: </label>
+                <input
+                  type="number"
+                  min="1"
+                  value={numberOfPeople}
+                  onChange={(e) => setNumberOfPeople(e.target.value)}
+                />
+              </div>
+              <button onClick={handleBooking}>Book Now</button>
+            </div>
+          </div>
           {/* Review Section */}
           <div>
             <h3>Reviews</h3>
@@ -288,4 +284,5 @@ const styles = {
     textDecoration: "none",
   },
 };
+
 export default Travel;
