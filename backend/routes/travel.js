@@ -10,10 +10,13 @@ const {
 } = require('../controllers/travelController');
 
 const authenticateUser = require('../middleware/authenticateUser'); // Ensure the user is authenticated
+const upload = require('../middleware/upload'); // Import multer configuration
 
 const router = express.Router();
 
 router.post('/', authenticateUser, createTravel); // Create a travel
+router.post('/', authenticateUser, upload.single('image'), createTravel); // Add upload middleware
+
 router.get('/', getAllTravels); // Get all travels (with search and filter)
 router.get('/owntravels', authenticateUser, getUserTravels); // Get user-specific travels
 // router.get('/owntravels', authenticateUser, getUserTravels); // Fetch user-specific travels

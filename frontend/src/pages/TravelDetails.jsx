@@ -161,6 +161,9 @@ const Travel = () => {
       {travel && (
         <div>
           {/* Travel Info Section */}
+          {travel.image && (
+              <img src={travel.image} alt={travel.name} width="100" /> // Display image if URL is provided
+            )}
           <h1>{travel.name}</h1>
           <p>{travel.description}</p>
           <p>Price: ${travel.price}</p>
@@ -267,6 +270,9 @@ const Travel = () => {
               {recommendedTravels.length > 0 ? (
                 recommendedTravels.map((travel) => (
                   <div key={travel._id} style={styles.travelCard}>
+                    {travel.image && (
+              <img src={travel.image} alt={travel.name} width="100" /> // Display image if URL is provided
+            )}
                     <h2>{travel.name}</h2>
                     <p>{travel.description}</p>
                     <p>Price: ${travel.price}</p>

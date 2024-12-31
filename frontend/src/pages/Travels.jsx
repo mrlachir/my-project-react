@@ -117,6 +117,9 @@ const Travels = () => {
             <p>{travel.description}</p>
             <p>Price: ${travel.price}</p>
             <p>Available Dates: {travel.availableDates.join(", ")}</p>
+            {travel.image && (
+              <img src={travel.image} alt={travel.name} width="100" /> // Display image if URL is provided
+            )}
           </div>
         ))
       ) : (

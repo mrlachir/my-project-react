@@ -1,19 +1,9 @@
 const mongoose = require('mongoose');
 
-// Define the travel schema
 const travelSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  price: { type: Number, required: true },
   availableDates: [Date],
   reviews: [
     {
@@ -21,14 +11,10 @@ const travelSchema = new mongoose.Schema({
       ref: 'Review', // Reference to the Review model
     },
   ],
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Reference to the User model
-    required: true,
-  },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  image: { type: String }, // New field for storing image URL or path
 }, { timestamps: true });
 
-// Create the travel model
 const Travel = mongoose.model('Travel', travelSchema);
 
 module.exports = Travel;

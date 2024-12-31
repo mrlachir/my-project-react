@@ -14,6 +14,7 @@ const Travel = require('../models/Travel');
 //       description,
 //       price,
 //       availableDates,
+//       createdBy: req.user.id, // Associate the travel with the logged-in user
 //     });
 //     await newTravel.save();
 //     return res.status(201).json(newTravel);
@@ -21,27 +22,6 @@ const Travel = require('../models/Travel');
 //     return res.status(500).json({ message: error.message });
 //   }
 // };
-const createTravel = async (req, res) => {
-  const { name, description, price, availableDates } = req.body;
-
-  if (!name || !description || !price || !availableDates || availableDates.length === 0) {
-    return res.status(400).json({ message: 'Name, description, price, and availableDates are required.' });
-  }
-
-  try {
-    const newTravel = new Travel({
-      name,
-      description,
-      price,
-      availableDates,
-      createdBy: req.user.id, // Associate the travel with the logged-in user
-    });
-    await newTravel.save();
-    return res.status(201).json(newTravel);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-};
 
 // // Get all travels with search and filter
 // const getAllTravels = async (req, res) => {
@@ -80,6 +60,50 @@ const createTravel = async (req, res) => {
 //   }
 // };
 // Get all travels with filters
+
+const createTravel = async (req, res) => {
+  try {
+    // Parse fields from req.body
+    const { name, description, price, availableDates, imageURL } = req.body;
+
+    // Validate required fields
+    if (!name || !description || !price || !availableDates || availableDates.length === 0) {
+      return res.status(400).json({ message: 'Name, description, price, and availableDates are required.' });
+    }
+
+    // Parse availableDates if it's a JSON string
+    let parsedAvailableDates;
+    try {
+      parsedAvailableDates = Array.isArray(availableDates)
+        ? availableDates
+        : JSON.parse(availableDates); // Parse availableDates if it's a JSON string
+    } catch (err) {
+      return res.status(400).json({ message: 'Invalid format for availableDates. Must be an array or a JSON array.' });
+    }
+
+    // Create a new travel document
+    const newTravel = new Travel({
+      name,
+      description,
+      price: parseFloat(price), // Ensure price is stored as a number
+      availableDates: parsedAvailableDates,
+      createdBy: req.user.id, // Associate the travel with the logged-in user
+      image: imageURL || null, // Use imageURL if provided
+    });
+
+    // Save the document to the database
+    await newTravel.save();
+
+    return res.status(201).json(newTravel);
+  } catch (error) {
+    console.error('Error creating travel:', error.message); // Log detailed error for debugging
+    return res.status(500).json({ message: 'Error creating travel.' });
+  }
+};
+
+
+
+
 const getAllTravels = async (req, res) => {
   try {
     const { search, minPrice, maxPrice, startDate, endDate } = req.query;

@@ -33,11 +33,15 @@ const Home = () => {
       {/* Main Section with Recommendations */}
       <main style={styles.main}>
         <h1 style={styles.title}>Recommended Travels</h1>
+        
         <div style={styles.recommendations}>
           {recommendedTravels.length > 0 ? (
             recommendedTravels.map((travel) => (
               <div key={travel._id} style={styles.travelCard}>
                 <h2>{travel.name}</h2>
+                {travel.image && (
+              <img src={travel.image} alt={travel.name} width="100" /> // Display image if URL is provided
+            )}
                 <p>{travel.description}</p>
                 <p>Price: ${travel.price}</p>
                 <Link to={`/travels/${travel._id}`} style={styles.viewDetails}>View Details</Link>
