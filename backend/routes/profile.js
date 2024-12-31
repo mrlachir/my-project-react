@@ -1,10 +1,13 @@
 const express = require('express');
-const { updateProfile } = require('../controllers/profileController');
-const authenticateUser = require('../middleware/authenticateUser');
+const { getProfile, updateProfile } = require('../controllers/profileController');
+const authenticateUser = require('../middleware/authenticateUser'); // Middleware for authentication
 
 const router = express.Router();
 
-// Route to update the user profile
+// Get user profile (GET)
+router.get('/', authenticateUser, getProfile);
+
+// Update user profile (PATCH)
 router.patch('/', authenticateUser, updateProfile);
 
 module.exports = router;

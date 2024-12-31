@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import Travels from "./pages/Travels";
+import OwnTravels from "./pages/OwnTravels";
 import TravelDetails from "./pages/TravelDetails";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -19,6 +20,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/travels" element={<Travels />} />
+        <Route path="/owntravels" element={<OwnTravels />} />
         <Route path="/travels/:id" element={<TravelDetails />} />
       </Routes>
       <Footer />

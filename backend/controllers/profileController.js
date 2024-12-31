@@ -1,63 +1,65 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
+// Utility function for error response
+const errorResponse = (res, statusCode, message) => res.status(statusCode).json({ message });
+
+// Get user profile
 const getProfile = async (req, res) => {
   try {
     // Extract token from Authorization header
-    const token = req.headers.authorization?.split(" ")[1]; // Extract token from 'Bearer token'
-
-    if (!token) {
-      console.error("No token provided.");
-      return res.status(401).json({ message: "Unauthorized. No token provided." });
-    }
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return errorResponse(res, 401, 'Unauthorized. No token provided.');
 
     // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Token decoded:", decoded); // Check if the token decoding works
 
     // Find the user by ID from the decoded token
-    const user = await User.findById(decoded.id).select("-password"); // Don't send the password back
+    const user = await User.findById(decoded.id).select('-password'); // Exclude password field
+    if (!user) return errorResponse(res, 404, 'User not found.');
 
-    if (!user) {
-      console.error("User not found.");
-      return res.status(404).json({ message: "User not found." });
-    }
-
-    // Return the user profile data
     res.status(200).json(user);
   } catch (error) {
-    console.error("Error fetching profile data:", error); // Log detailed error
-    res.status(500).json({ message: "Error fetching profile data." });
+    console.error('Error fetching profile data:', error);
+    errorResponse(res, 500, 'Error fetching profile data.');
   }
 };
 
-
+// Update user profile
 const updateProfile = async (req, res) => {
   try {
-    // Fetch the user from the database using the decoded ID from the JWT
+    const { name, email, profileInfo } = req.body;
+
+    // Find the user by ID from the token middleware
     const user = await User.findById(req.user.id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    if (!user) return errorResponse(res, 404, 'User not found.');
+
+    // Update user details
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (profileInfo) {
+      user.profileInfo = {
+        ...user.profileInfo,
+        ...profileInfo, // Merge profileInfo fields
+      };
     }
 
-    // Update the user details
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-
-    // Save the updated user information
+    // Save updated user
     await user.save();
 
-    return res.status(200).json({
+    res.status(200).json({
       message: 'Profile updated successfully',
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
+        profileInfo: user.profileInfo,
       },
     });
-  } catch (err) {
-    return res.status(500).json({ message: 'Error updating profile', error: err.message });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    errorResponse(res, 500, 'Error updating profile.');
   }
 };
 
-module.exports = { updateProfile,getProfile };
+module.exports = { getProfile, updateProfile };
