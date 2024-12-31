@@ -95,23 +95,54 @@ const Travel = () => {
   };
 
   // Handle review submission
+  // const handleSubmitReview = async () => {
+  //   if (!reviewText || rating === "") {
+  //     alert("Please write a review and select a rating.");
+  //     return;
+  //   }
+
+  //   const newReview = {
+  //     travelId: id,
+  //     rating,
+  //     comment: reviewText,
+  //   };
+
+  //   try {
+  //     const response = await API.post(`/reviews`, newReview);
+  //     console.log("Review response:", response); // Debug the response
+
+  //     if (response.status === 200) {
+  //       setReviews([...reviews, response.data.review]);
+  //       setReviewText(""); // Clear the review text
+  //       setRating(5); // Reset rating to default
+  //       alert("Review submitted successfully!");
+  //     } else {
+  //       alert("Failed to submit your review.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error submitting review:", error);
+  //     alert("Error submitting your review.");
+  //   }
+  // };
   const handleSubmitReview = async () => {
     if (!reviewText || rating === "") {
       alert("Please write a review and select a rating.");
       return;
     }
-
+  
     const newReview = {
       travelId: id,
       rating,
       comment: reviewText,
     };
-
+  
+    console.log("Submitting review:", newReview); // Debugging
+  
     try {
       const response = await API.post(`/reviews`, newReview);
-      console.log("Review response:", response); // Debug the response
-
-      if (response.status === 200) {
+      console.log("Review response:", response); // Debugging
+  
+      if (response.status === 200 || response.status === 201) {
         setReviews([...reviews, response.data.review]);
         setReviewText(""); // Clear the review text
         setRating(5); // Reset rating to default
@@ -194,8 +225,7 @@ const Travel = () => {
                 reviews.map((review, index) => (
                   <div key={index} style={{ marginBottom: "10px" }}>
                     <p>
-                      <strong>{review.user.name}</strong> - {review.rating}{" "}
-                      Stars
+                    <strong>{review.user?.name || "You"}</strong> - {review.rating} Stars
                     </p>
                     <p>{review.comment}</p>
                   </div>
