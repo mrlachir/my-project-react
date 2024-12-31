@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const [user, setUser] = useState({});
+  const [bookings, setBookings] = useState([]); // State for user's bookings
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [passwordForm, setPasswordForm] = useState({ oldPassword: '', newPassword: '' });
@@ -12,24 +13,33 @@ const Profile = () => {
   const [passwordError, setPasswordError] = useState(null); // Password update error
   const navigate = useNavigate();
 
-  // Fetch user profile
+  // Fetch user profile and bookings
   useEffect(() => {
-    axios.get('/profile')
-      .then(response => setUser(response.data))
-      .catch(err => setError('Failed to fetch profile. Please try again.'));
+    // Fetch user profile
+    axios
+      .get('/profile')
+      .then((response) => setUser(response.data))
+      .catch((err) => setError('Failed to fetch profile. Please try again.'));
+
+    // Fetch user's bookings
+    axios
+      .get('/bookings')
+      .then((response) => setBookings(response.data.bookings))
+      .catch((err) => setError('Failed to fetch bookings. Please try again.'));
   }, []);
 
   // Handle profile update
   const handleUpdate = (e) => {
     e.preventDefault();
     setError(null); // Reset error
-    axios.patch('/profile', formData)
-      .then(response => {
+    axios
+      .patch('/profile', formData)
+      .then((response) => {
         setUser(response.data.user);
         setEditing(false);
         alert('Profile updated successfully!');
       })
-      .catch(err => {
+      .catch((err) => {
         setError('Failed to update profile. Please try again.');
         console.error('Error updating profile:', err);
       });
@@ -39,13 +49,14 @@ const Profile = () => {
   const handlePasswordUpdate = (e) => {
     e.preventDefault();
     setPasswordError(null); // Reset password error
-    axios.patch('/profile/password', passwordForm)
+    axios
+      .patch('/profile/password', passwordForm)
       .then(() => {
         alert('Password updated successfully!');
         setPasswordUpdating(false);
         setPasswordForm({ oldPassword: '', newPassword: '' });
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.response?.status === 400) {
           setPasswordError('New password too short.');
         } else if (err.response?.status === 401) {
@@ -56,6 +67,20 @@ const Profile = () => {
           setPasswordError('Failed to update password. Please try again.');
         }
         console.error('Error updating password:', err);
+      });
+  };
+
+  // Handle cancel booking
+  const handleCancelBooking = (bookingId) => {
+    axios
+      .patch(`/bookings/${bookingId}`, { status: 'Cancelled' }) // Update booking status to "Cancelled"
+      .then(() => {
+        setBookings(bookings.filter((booking) => booking._id !== bookingId));
+        alert('Booking cancelled successfully.');
+      })
+      .catch((err) => {
+        setError('Failed to cancel booking. Please try again.');
+        console.error('Error canceling booking:', err);
       });
   };
 
@@ -126,6 +151,22 @@ const Profile = () => {
           <button type="button" onClick={() => setPasswordUpdating(false)}>Cancel</button>
         </form>
       )}
+
+      <h2>My Bookings</h2>
+      <ul>
+      {bookings
+  .filter((booking) => booking.status !== 'Cancelled') // Filter out cancelled bookings
+  .map((booking) => (
+    <li key={booking._id}>
+      <p><strong>Travel:</strong> {booking.travel.name}</p>
+      <p><strong>Total Price:</strong> ${booking.totalPrice}</p>
+      <p><strong>Status:</strong> {booking.status}</p>
+      <p><strong>Dates:</strong> {new Date(booking.startDate).toLocaleDateString()} to {new Date(booking.endDate).toLocaleDateString()}</p>
+      <button onClick={() => handleCancelBooking(booking._id)}>Cancel Booking</button>
+    </li>
+  ))}
+
+      </ul>
     </div>
   );
 };
