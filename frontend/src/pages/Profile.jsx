@@ -6,6 +6,8 @@ const Profile = () => {
   const [user, setUser] = useState({});
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({});
+  const [passwordForm, setPasswordForm] = useState({ oldPassword: '', newPassword: '' });
+  const [passwordUpdating, setPasswordUpdating] = useState(false);
   const navigate = useNavigate();
 
   // Fetch user profile
@@ -15,7 +17,7 @@ const Profile = () => {
       .catch(err => console.error('Error fetching profile:', err));
   }, []);
 
-  // Handle form submission
+  // Handle profile update
   const handleUpdate = (e) => {
     e.preventDefault();
     axios.patch('/profile', formData)
@@ -24,6 +26,18 @@ const Profile = () => {
         setEditing(false);
       })
       .catch(err => console.error('Error updating profile:', err));
+  };
+
+  // Handle password update
+  const handlePasswordUpdate = (e) => {
+    e.preventDefault();
+    axios.patch('/profile/password', passwordForm)
+      .then(() => {
+        alert('Password updated successfully!');
+        setPasswordUpdating(false);
+        setPasswordForm({ oldPassword: '', newPassword: '' });
+      })
+      .catch(err => console.error('Error updating password:', err));
   };
 
   // Logout user
@@ -40,6 +54,7 @@ const Profile = () => {
           <p><strong>Name:</strong> {user.name}</p>
           <p><strong>Email:</strong> {user.email}</p>
           <button onClick={() => setEditing(true)}>Edit Profile</button>
+          <button onClick={() => setPasswordUpdating(true)}>Update Password</button>
           <button onClick={handleLogout}>Logout</button>
         </div>
       ) : (
@@ -62,6 +77,32 @@ const Profile = () => {
           </label>
           <button type="submit">Save</button>
           <button type="button" onClick={() => setEditing(false)}>Cancel</button>
+        </form>
+      )}
+
+      {passwordUpdating && (
+        <form onSubmit={handlePasswordUpdate}>
+          <h2>Update Password</h2>
+          <label>
+            Old Password:
+            <input
+              type="password"
+              value={passwordForm.oldPassword}
+              onChange={(e) => setPasswordForm({ ...passwordForm, oldPassword: e.target.value })}
+              required
+            />
+          </label>
+          <label>
+            New Password:
+            <input
+              type="password"
+              value={passwordForm.newPassword}
+              onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
+              required
+            />
+          </label>
+          <button type="submit">Update Password</button>
+          <button type="button" onClick={() => setPasswordUpdating(false)}>Cancel</button>
         </form>
       )}
     </div>
