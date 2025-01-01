@@ -464,7 +464,7 @@ const Travel = () => {
             <h3 className="section-title">Recommended Travels</h3>
             <div className="recommendations">
               {recommendedTravels.length > 0 ? (
-                recommendedTravels.map((recommendedTravel) => (
+                recommendedTravels.slice(0, 3).map((recommendedTravel) => (
                   <div key={recommendedTravel._id} className="recommendation-card">
                     {recommendedTravel.image && (
                       <img

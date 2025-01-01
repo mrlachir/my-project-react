@@ -102,7 +102,7 @@ const Header = () => {
               ':hover': { color: '#1d4ed8' }
             }}
           >
-            mrLachir
+            TravelMate
           </Link>
         </div>
         <div style={styles.navLinks}>

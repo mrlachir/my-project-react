@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
 import API from "../utils/api";
-import { Link } from "react-router-dom"; // For navigation links (e.g., to the travels page)
+import { Link } from "react-router-dom"; // For navigation links
 
 const Travels = () => {
   const [travels, setTravels] = useState([]);
-  const [search, setSearch] = useState(""); // Search query state
-  const [minPrice, setMinPrice] = useState(""); // Min price filter state
-  const [maxPrice, setMaxPrice] = useState(""); // Max price filter state
-  const [startDate, setStartDate] = useState(""); // Start date filter state
-  const [endDate, setEndDate] = useState(""); // End date filter state
+  const [search, setSearch] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     const fetchTravels = async () => {
       try {
-        // Build the query params based on the filter states
         let queryParams = "";
 
         if (search) queryParams += `search=${search}&`;
@@ -22,10 +21,8 @@ const Travels = () => {
         if (startDate) queryParams += `startDate=${startDate}&`;
         if (endDate) queryParams += `endDate=${endDate}&`;
 
-        // Remove the trailing "&" from query params
         queryParams = queryParams.slice(0, -1);
 
-        // Make the API call with the dynamic query parameters
         const { data } = await API.get(`/travels?${queryParams}`);
         setTravels(data);
       } catch (error) {
@@ -34,12 +31,11 @@ const Travels = () => {
     };
 
     fetchTravels();
-  }, []); // Initially fetch all travels
+  }, []);
 
   const handleSearchAndFilter = (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
 
-    // Refetch travels with the filters applied
     const fetchTravels = async () => {
       try {
         let queryParams = "";
@@ -50,7 +46,7 @@ const Travels = () => {
         if (startDate) queryParams += `startDate=${startDate}&`;
         if (endDate) queryParams += `endDate=${endDate}&`;
 
-        queryParams = queryParams.slice(0, -1); // Clean up the query string
+        queryParams = queryParams.slice(0, -1);
 
         const { data } = await API.get(`/travels?${queryParams}`);
         setTravels(data);
@@ -63,71 +59,58 @@ const Travels = () => {
   };
 
   return (
-    <div>
+    <div className="travels-page">
       <style>
         {`
-          .travels-container {
-            max-width: 1200px;
-            margin: 0 auto;
+          .travels-page {
+            background-color: #f9fafb;
+            font-family: 'Arial', sans-serif;
             padding: 2rem;
           }
 
           .travels-title {
-            color: #1a1a1a;
-            font-size: 2.25rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
+            color: #111827;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
             text-align: center;
           }
 
           .search-form {
-            background-color: #ffffff;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-          }
-
-          .search-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #d1d5db;
-            border-radius: 4px;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-          }
-
-          .filters-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-          }
-
-          .filter-group {
             display: flex;
+            align-items: center;
             gap: 0.5rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+            background-color: #ffffff;
+            padding: 0.75rem 1rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
           }
 
-          .filter-input {
-            flex: 1;
-            padding: 0.75rem;
+          .search-input, .filter-input {
+            padding: 0.85rem;
+            font-size: 1rem;
             border: 1px solid #d1d5db;
-            border-radius: 4px;
-            font-size: 0.875rem;
+            border-radius: 50px;
+            width: auto;
+            transition: border-color 0.2s ease-in-out;
+          }
+
+          .search-input:focus, .filter-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 5px rgba(37, 99, 235, 0.5);
           }
 
           .search-button {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 4px;
+            padding: 0.85rem 2rem;
             font-size: 1rem;
-            font-weight: 500;
+            color: #fff;
+            background-color: #2563eb;
+            border: none;
+            border-radius: 50px;
             cursor: pointer;
-            transition: background-color 0.15s ease-in-out;
+            transition: background-color 0.2s ease-in-out;
           }
 
           .search-button:hover {
@@ -136,20 +119,20 @@ const Travels = () => {
 
           .travels-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
           }
 
           .travel-card {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             transition: transform 0.2s ease-in-out;
           }
 
           .travel-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-8px);
           }
 
           .travel-image {
@@ -159,139 +142,123 @@ const Travels = () => {
           }
 
           .travel-content {
-            padding: 1.25rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
           }
 
           .travel-title {
             font-size: 1.25rem;
-            font-weight: 600;
-            color: #1a1a1a;
+            font-weight: bold;
+            color: #111827;
             margin-bottom: 0.5rem;
           }
 
           .travel-description {
-            color: #4b5563;
             font-size: 0.875rem;
+            color: #6b7280;
             margin-bottom: 1rem;
-            line-height: 1.5;
+          }
+
+          .travel-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
           }
 
           .travel-price {
-            font-weight: 600;
-            color: #2563eb;
-            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #16a34a;
           }
 
-          .travel-dates {
+          .view-details {
+            padding: 0.5rem 1rem;
             font-size: 0.875rem;
-            color: #6b7280;
+            color: #fff;
+            background-color: #2563eb;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.2s ease-in-out;
+          }
+
+          .view-details:hover {
+            background-color: #1d4ed8;
           }
 
           .no-results {
             text-align: center;
-            color: #6b7280;
             font-size: 1.125rem;
-            padding: 2rem;
-          }
-
-          input:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-          }
-            .view-details {
-            color: #2563eb;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 0.5rem;
-          }
-
-          .view-details:hover {
-            text-decoration: underline;
+            color: #6b7280;
           }
         `}
       </style>
 
-      <div className="travels-container">
-        <h1 className="travels-title">Available Travels</h1>
+      <h1 className="travels-title">Discover Your Next Adventure</h1>
 
-        <form className="search-form" onSubmit={handleSearchAndFilter}>
-          <input
-            className="search-input"
-            type="text"
-            placeholder="Search by name or description"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+      <form className="search-form" onSubmit={handleSearchAndFilter}>
+        <input
+          className="search-input"
+          type="text"
+          placeholder="Search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-          <div className="filters-container">
-            <div className="filter-group">
-              <input
-                className="filter-input"
-                type="number"
-                placeholder="Min Price"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-              />
-              <input
-                className="filter-input"
-                type="number"
-                placeholder="Max Price"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-              />
-            </div>
+        <input
+          className="filter-input"
+          type="number"
+          placeholder="Min"
+          value={minPrice}
+          onChange={(e) => setMinPrice(e.target.value)}
+        />
+        <input
+          className="filter-input"
+          type="number"
+          placeholder="Max"
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(e.target.value)}
+        />
 
-            <div className="filter-group">
-              <input
-                className="filter-input"
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-              <input
-                className="filter-input"
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </div>
-          </div>
+        <input
+          className="filter-input"
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <input
+          className="filter-input"
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
 
-          <button className="search-button" type="submit">
-            Search & Filter
-          </button>
-        </form>
+        <button className="search-button" type="submit">Search</button>
+      </form>
 
-        <div className="travels-grid">
-          {travels.length > 0 ? (
-            travels.map((travel) => (
-              <div key={travel._id} className="travel-card">
-                {travel.image && (
-                  <img 
-                    src={travel.image} 
-                    alt={travel.name} 
-                    className="travel-image"
-                  />
-                )}
-                <div className="travel-content">
+      <div className="travels-grid">
+        {travels.length > 0 ? (
+          travels.map((travel) => (
+            <div key={travel._id} className="travel-card">
+              {travel.image && (
+                <img src={travel.image} alt={travel.name} className="travel-image" />
+              )}
+              <div className="travel-content">
+                <div>
                   <h2 className="travel-title">{travel.name}</h2>
                   <p className="travel-description">{travel.description}</p>
-                  <p className="travel-price">Price: ${travel.price}</p>
-                  <p className="travel-dates">
-                    Available Dates: {travel.availableDates.map(date => new Date(date).toISOString().split('T')[0]).join(" to ")}
-                  </p>
-                  
-                  <Link to={`/travels/${travel._id}`} className="view-details">
-                  View Details
-                </Link>
+                </div>
+                <div className="travel-footer">
+                  <p className="travel-price">${travel.price}</p>
+                  <Link to={`/travels/${travel._id}`} className="view-details">View Details</Link>
                 </div>
               </div>
-            ))
-          ) : (
-            <p className="no-results">No travels found</p>
-          )}
-        </div>
+            </div>
+          ))
+        ) : (
+          <p className="no-results">No travels found</p>
+        )}
       </div>
     </div>
   );
