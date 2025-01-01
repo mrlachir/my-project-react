@@ -2,4 +2,4 @@ cd backend :
 npm run dev
 
 cd frontend : 
-npm start
+npm install && npm start
