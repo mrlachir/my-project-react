@@ -9,10 +9,11 @@
   cd backend 
   
   npm install -g nodemon 
-  
+
+  npm install multer
+
   npm run dev 
   
-  npm install multer
 
 
 5) oppen Terminal 2 and run this command :
