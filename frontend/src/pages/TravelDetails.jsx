@@ -129,347 +129,417 @@ const Travel = () => {
     <div>
       <style>
         {`
-        .travel-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: #f8fafc;
-}
+          .travel-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f8fafc;
+          }
 
-/* Top section: Image left, Info right */
-.travel-header {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  background: white;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  margin-bottom: 2rem;
-}
+          /* Top section: Image left, Info right */
+          .travel-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+          }
 
-.image-section {
-  width: 99%;
-}
+          .image-section {
+            flex: 1;
+            max-width: 100%;
+          }
 
-.travel-image {
-  width: 99%;
-  height: 500px;
-  object-fit: cover;
-  border-radius: 15px;
-}
+          .travel-image {
+            width: 100%;
+            height: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+          }
 
-.info-section {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
+          .info-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1rem;
+          }
 
-.travel-title {
-  font-size: 2.5rem;
-  color: #111827;
-  font-weight: 700;
-}
+          .travel-title {
+            font-size: 2rem;
+            color: #1f2937;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+          }
 
-.travel-description {
-  font-size: 1.1rem;
-  color: #4b5563;
-  line-height: 1.6;
-}
+          .travel-description {
+            font-size: 1rem;
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+          }
 
-.travel-price {
-  font-size: 1.8rem;
-  color: #0f766e;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  background: #f0fdfa;
-  border-radius: 10px;
-  display: inline-block;
-}
+          .travel-price {
+            font-size: 1.5rem;
+            color: #059669;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            background: #ecfdf5;
+            border-radius: 8px;
+            align-self: flex-start;
+          }
 
-.dates-title {
-  font-size: 1.5rem;
-  color: #111827;
-  margin-top: 1rem;
-}
+          .dates-title {
+            font-size: 1.3rem;
+            color: #1f2937;
+            margin-top: 1rem;
+            font-weight: bold;
+          }
 
-.dates-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  list-style: none;
-  padding: 0;
-}
+          .dates-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+          }
 
-.dates-list li {
-  background: #f3f4f6;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-}
+          .dates-list li {
+            background: #f9fafb;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #4b5563;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          }
 
-/* Middle section: Reviews left, Booking right */
-.content-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-bottom: 2rem;
-}
+          /* Responsive Adjustments */
+          @media (max-width: 1024px) {
+            .travel-header {
+              flex-direction: column;
+              gap: 1.5rem;
+            }
 
-/* Reviews Section */
-.reviews-section {
-  background: white;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
+            .travel-image {
+              max-height: 300px;
+            }
 
-.reviews-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
+            .travel-title {
+              font-size: 1.8rem;
+            }
 
-.review-card {
-  background: #f8fafc;
-  padding: 1.5rem;
-  border-radius: 12px;
-}
+            .travel-price {
+              font-size: 1.3rem;
+            }
 
-.review-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-}
+            .dates-title {
+              font-size: 1.2rem;
+            }
+          }
 
-.reviewer-name {
-  font-weight: 600;
-  color: #111827;
-}
 
-.review-rating {
-  color: #0f766e;
-  background: #f0fdfa;
-  padding: 0.25rem 0.75rem;
-  border-radius: 6px;
-}
+          /* Middle section: Reviews left, Booking right */
+          .content-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+          }
 
-.review-comment {
-  color: #4b5563;
-  line-height: 1.5;
-}
+          /* Reviews Section */
+          .reviews-section {
+            flex: 1;
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          }
 
-/* Booking Form */
-.booking-form {
-  background: white;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
+          .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+          }
 
-.section-title {
-  font-size: 1.8rem;
-  color: #111827;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
-}
+          .review-card {
+            background: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+          }
 
-.form-group {
-  margin-bottom: 1.5rem;
-}
+          .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+          }
 
-.form-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #374151;
-  font-weight: 500;
-}
+          .reviewer-name {
+            font-weight: bold;
+            color: #1f2937;
+          }
 
-.form-input {
-  width: 99%;
-  padding: 0.75rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 1rem;
-  transition: all 0.2s;
-}
+          .review-rating {
+            color: #047857;
+            background: #d1fae5;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: bold;
+          }
 
-.form-input:focus {
-  border-color: #0f766e;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
-}
+          .review-comment {
+            color: #6b7280;
+            line-height: 1.6;
+          }
 
-.book-button {
-  width: 99%;
-  padding: 1rem;
-  background: #0f766e;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
+          /* Booking Form */
+          .booking-form {
+            flex: 1;
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          }
 
-.book-button:hover {
-  background: #115e59;
-  transform: translateY(-2px);
-}
+          .section-title {
+            font-size: 1.6rem;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            font-weight: bold;
+          }
 
-/* Review Form */
-.review-form {
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid #e5e7eb;
-}
+          .form-group {
+            margin-bottom: 1.5rem;
+          }
 
-.review-textarea {
-  width: 99%;
-  padding: 1rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  min-height: 120px;
-  margin-bottom: 1rem;
-  font-family: inherit;
-  resize: vertical;
-  transition: all 0.2s;
-}
+          .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: medium;
+          }
 
-.review-textarea:focus {
-  border-color: #0f766e;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
-}
+          .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+          }
 
-.rating-select {
-  width: 99%;
-  padding: 0.75rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  transition: all 0.2s;
-}
+          .form-input:focus {
+            border-color: #047857;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.2);
+          }
 
-.submit-review-button {
-  background: #0f766e;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
+          .book-button {
+            width: 100%;
+            padding: 1rem;
+            background: #047857;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+          }
 
-.submit-review-button:hover {
-  background: #115e59;
-  transform: translateY(-2px);
-}
+          .book-button:hover {
+            background: #065f46;
+            transform: translateY(-2px);
+          }
 
-/* Recommendations Section */
-.recommendations-section {
-  background: white;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
+          /* Review Form */
+          .review-form {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+          }
 
-.recommendations {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-}
+          .review-textarea {
+            width: 94%;
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            // min-height: 40px;
+            margin-bottom: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.2s, box-shadow 0.2s;
+          }
 
-.recommendation-card {
-  background: white;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s;
-}
+          .review-textarea:focus {
+            border-color: #047857;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.2);
+          }
 
-.recommendation-card:hover {
-  transform: translateY(-5px);
-}
+          .rating-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+          }
 
-.recommendation-image {
-  width: 99%;
-  height: 200px;
-  object-fit: cover;
-}
+          .rating-select:focus {
+            border-color: #047857;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.2);
+          }
 
-.recommendation-content {
-  padding: 1.5rem;
-}
+          .submit-review-button {
+            background: #047857;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+          }
 
-.recommendation-title {
-  font-size: 1.3rem;
-  color: #111827;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-}
+          .submit-review-button:hover {
+            background: #065f46;
+            transform: translateY(-2px);
+          }
 
-.recommendation-description {
-  color: #4b5563;
-  margin-bottom: 1rem;
-  line-height: 1.5;
-}
+          /* Responsive Adjustments */
+          @media (max-width: 768px) {
+            .content-wrapper {
+              flex-direction: column;
+            }
 
-.recommendation-price {
-  color: #0f766e;
-  font-weight: 600;
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-}
+            .section-title {
+              font-size: 1.4rem;
+            }
 
-.recommendation-link {
-  display: inline-block;
-  color: #0f766e;
-  text-decoration: none;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  background: #f0fdfa;
-  border-radius: 8px;
-  transition: all 0.2s;
-}
+            .book-button,
+            .form-input {
+              font-size: 1rem;
+            }
+          }
 
-.recommendation-link:hover {
-  background: #0f766e;
-  color: white;
-}
+          /* Recommendations Section */
+          .recommendations-section {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .travel-header,
-  .content-wrapper {
-    grid-template-columns: 1fr;
-  }
-  
-  .recommendations {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .travel-image {
-    height: 400px;
-  }
-}
+          .recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+          }
 
-@media (max-width: 768px) {
-  .travel-container {
-    padding: 1rem;
-  }
-  
-  .recommendations {
-    grid-template-columns: 1fr;
-  }
-  
-  .travel-title {
-    font-size: 2rem;
-  }
-}
+          .recommendation-card {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+          }
+
+          .recommendation-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+          }
+
+          .recommendation-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 2px solid #e5e7eb;
+          }
+
+          .recommendation-content {
+            padding: 1rem 1.5rem;
+          }
+
+          .recommendation-title {
+            font-size: 1.4rem;
+            color: #1f2937;
+            margin-bottom: 0.75rem;
+            font-weight: bold;
+          }
+
+          .recommendation-description {
+            font-size: 0.95rem;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+          }
+
+          .recommendation-price {
+            font-size: 1.2rem;
+            color: #047857;
+            font-weight: bold;
+            margin-bottom: 1rem;
+          }
+
+          .recommendation-link {
+            display: inline-block;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #047857;
+            text-decoration: none;
+            background: #d1fae5;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+          }
+
+          .recommendation-link:hover {
+            background: #047857;
+            color: #ffffff;
+          }
+
+          /* Responsive Design */
+          @media (max-width: 1024px) {
+            .recommendations {
+              grid-template-columns: repeat(2, 1fr);
+            }
+
+            .recommendation-image {
+              height: 160px;
+            }
+          }
+
+          @media (max-width: 768px) {
+            .recommendations {
+              grid-template-columns: 1fr;
+            }
+
+            .recommendation-content {
+              padding: 1rem;
+            }
+
+            .recommendation-title {
+              font-size: 1.2rem;
+            }
+
+            .recommendation-price {
+              font-size: 1.1rem;
+            }
+          }
+
         `}
       </style>
 
