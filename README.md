@@ -7,13 +7,19 @@
 3) oppen Terminal 1 and run this command :
 
   cd backend 
+  
   npm install -g nodemon 
-  npm run dev 
+
   npm install multer
+
+  npm run dev 
+  
 
 
 5) oppen Terminal 2 and run this command :
 
   cd frontend 
+  
   npm install react@18 react-dom@18
+  
   npm start
