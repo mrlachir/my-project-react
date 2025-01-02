@@ -2,7 +2,6 @@ const Footer = () => {
   const teamMembers = [
     "Lachir Mohammed",
     "Znady Mohammed Amine",
-    "Oussama Hadrach",
     "Hadraoui Anas"
   ];
 
