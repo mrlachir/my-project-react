@@ -234,7 +234,9 @@ const Travels = () => {
           onChange={(e) => setEndDate(e.target.value)}
         />
 
-        <button className="search-button" type="submit">Search</button>
+        <button className="search-button" type="submit">
+          Search
+        </button>
       </form>
 
       <div className="travels-grid">
@@ -242,7 +244,11 @@ const Travels = () => {
           travels.map((travel) => (
             <div key={travel._id} className="travel-card">
               {travel.image && (
-                <img src={travel.image} alt={travel.name} className="travel-image" />
+                <img
+                  src={travel.image}
+                  alt={travel.name}
+                  className="travel-image"
+                />
               )}
               <div className="travel-content">
                 <div>
@@ -251,7 +257,9 @@ const Travels = () => {
                 </div>
                 <div className="travel-footer">
                   <p className="travel-price">${travel.price}</p>
-                  <Link to={`/travels/${travel._id}`} className="view-details">View Details</Link>
+                  <Link to={`/travels/${travel._id}`} className="view-details">
+                    View Details
+                  </Link>
                 </div>
               </div>
             </div>

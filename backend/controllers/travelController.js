@@ -101,9 +101,6 @@ const createTravel = async (req, res) => {
   }
 };
 
-
-
-
 const getAllTravels = async (req, res) => {
   try {
     const { search, minPrice, maxPrice, startDate, endDate } = req.query;
@@ -136,7 +133,6 @@ const getAllTravels = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-
 
 // Get travel by ID
 const getTravelById = async (req, res) => {
@@ -185,7 +181,6 @@ const deleteTravel = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-
 
 // Get recommended travels (for example, top 5 most popular or rated)
 const getRecommendedTravels = async (req, res) => {

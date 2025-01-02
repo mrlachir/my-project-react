@@ -2,35 +2,6 @@ const Booking = require('../models/Booking');
 const Travel = require('../models/Travel');
 
 // Function to create a booking
-// const createBooking = async (req, res) => {
-//   try {
-//     const { travelId, numberOfPeople, bookingDate } = req.body;
-
-//     // Check if travel exists
-//     const travel = await Travel.findById(travelId);
-//     if (!travel) {
-//       return res.status(404).json({ message: 'Travel not found' });
-//     }
-
-//     // Create a new booking
-//     const booking = new Booking({
-//       user: req.user.id, // User ID from JWT
-//       travel: travelId,
-//       numberOfPeople,
-//       bookingDate,
-//     });
-
-//     // Save the booking
-//     await booking.save();
-
-//     return res.status(201).json({
-//       message: 'Booking created successfully',
-//       booking,
-//     });
-//   } catch (err) {
-//     return res.status(500).json({ message: 'Error creating booking', error: err.message });
-//   }
-// };
 const createBooking = async (req, res) => {
   try {
     const { travelId, numberOfPeople, bookingDate, startDate, endDate } = req.body;

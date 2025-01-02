@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import API from "../utils/api";
 
 const Register = () => {
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -14,9 +18,11 @@ const Register = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.email.trim()) newErrors.email = "Email is required.";
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Invalid email format.";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = "Invalid email format.";
     if (!formData.password.trim()) newErrors.password = "Password is required.";
-    else if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters.";
+    else if (formData.password.length < 6)
+      newErrors.password = "Password must be at least 6 characters.";
     return newErrors;
   };
 
@@ -134,9 +140,7 @@ const Register = () => {
 
       <div className="register-container">
         <h1 className="register-title">Register</h1>
-        {errors.server && (
-          <div className="server-error">{errors.server}</div>
-        )}
+        {errors.server && <div className="server-error">{errors.server}</div>}
         {successMessage && (
           <div className="success-message">{successMessage}</div>
         )}
@@ -153,9 +157,7 @@ const Register = () => {
               value={formData.name}
               onChange={handleChange}
             />
-            {errors.name && (
-              <p className="error-message">{errors.name}</p>
-            )}
+            {errors.name && <p className="error-message">{errors.name}</p>}
           </div>
           <div className="form-group">
             <label className="form-label" htmlFor="email">
@@ -169,9 +171,7 @@ const Register = () => {
               value={formData.email}
               onChange={handleChange}
             />
-            {errors.email && (
-              <p className="error-message">{errors.email}</p>
-            )}
+            {errors.email && <p className="error-message">{errors.email}</p>}
           </div>
           <div className="form-group">
             <label className="form-label" htmlFor="password">

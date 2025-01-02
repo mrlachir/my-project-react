@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import axios from '../utils/api'; // Assume this is your configured Axios instance
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import axios from "../utils/api"; // Assume this is your configured Axios instance
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [user, setUser] = useState({});
   const [bookings, setBookings] = useState([]); // State for user's bookings
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({});
-  const [passwordForm, setPasswordForm] = useState({ oldPassword: '', newPassword: '' });
+  const [passwordForm, setPasswordForm] = useState({
+    oldPassword: "",
+    newPassword: "",
+  });
   const [passwordUpdating, setPasswordUpdating] = useState(false);
   const [error, setError] = useState(null); // General error message
   const [passwordError, setPasswordError] = useState(null); // Password update error
@@ -17,15 +20,15 @@ const Profile = () => {
   useEffect(() => {
     // Fetch user profile
     axios
-      .get('/profile')
+      .get("/profile")
       .then((response) => setUser(response.data))
-      .catch((err) => setError('Failed to fetch profile. Please try again.'));
+      .catch((err) => setError("Failed to fetch profile. Please try again."));
 
     // Fetch user's bookings
     axios
-      .get('/bookings')
+      .get("/bookings")
       .then((response) => setBookings(response.data.bookings))
-      .catch((err) => setError('Failed to fetch bookings. Please try again.'));
+      .catch((err) => setError("Failed to fetch bookings. Please try again."));
   }, []);
 
   // Handle profile update
@@ -33,15 +36,15 @@ const Profile = () => {
     e.preventDefault();
     setError(null); // Reset error
     axios
-      .patch('/profile', formData)
+      .patch("/profile", formData)
       .then((response) => {
         setUser(response.data.user);
         setEditing(false);
-        alert('Profile updated successfully!');
+        alert("Profile updated successfully!");
       })
       .catch((err) => {
-        setError('Failed to update profile. Please try again.');
-        console.error('Error updating profile:', err);
+        setError("Failed to update profile. Please try again.");
+        console.error("Error updating profile:", err);
       });
   };
 
@@ -50,44 +53,46 @@ const Profile = () => {
     e.preventDefault();
     setPasswordError(null); // Reset password error
     axios
-      .patch('/profile/password', passwordForm)
+      .patch("/profile/password", passwordForm)
       .then(() => {
-        alert('Password updated successfully!');
+        alert("Password updated successfully!");
         setPasswordUpdating(false);
-        setPasswordForm({ oldPassword: '', newPassword: '' });
+        setPasswordForm({ oldPassword: "", newPassword: "" });
       })
       .catch((err) => {
         if (err.response?.status === 400) {
-          setPasswordError('New password too short.');
+          setPasswordError("New password too short.");
         } else if (err.response?.status === 401) {
-          setPasswordError('Old password is incorrect.');
+          setPasswordError("Old password is incorrect.");
         } else if (err.response?.status === 500) {
-          setPasswordError('An internal server error occurred. Please try again later.');
+          setPasswordError(
+            "An internal server error occurred. Please try again later."
+          );
         } else {
-          setPasswordError('Failed to update password. Please try again.');
+          setPasswordError("Failed to update password. Please try again.");
         }
-        console.error('Error updating password:', err);
+        console.error("Error updating password:", err);
       });
   };
 
   // Handle cancel booking
   const handleCancelBooking = (bookingId) => {
     axios
-      .patch(`/bookings/${bookingId}`, { status: 'Cancelled' }) // Update booking status to "Cancelled"
+      .patch(`/bookings/${bookingId}`, { status: "Cancelled" }) // Update booking status to "Cancelled"
       .then(() => {
         setBookings(bookings.filter((booking) => booking._id !== bookingId));
-        alert('Booking cancelled successfully.');
+        alert("Booking cancelled successfully.");
       })
       .catch((err) => {
-        setError('Failed to cancel booking. Please try again.');
-        console.error('Error canceling booking:', err);
+        setError("Failed to cancel booking. Please try again.");
+        console.error("Error canceling booking:", err);
       });
   };
 
   // Logout user
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove JWT from storage
-    navigate('/login'); // Redirect to login page
+    localStorage.removeItem("token"); // Remove JWT from storage
+    navigate("/login"); // Redirect to login page
   };
 
   return (
@@ -282,10 +287,16 @@ const Profile = () => {
                 </div>
               </div>
               <div className="button-group">
-                <button className="primary-button" onClick={() => setEditing(true)}>
+                <button
+                  className="primary-button"
+                  onClick={() => setEditing(true)}
+                >
                   Edit Profile
                 </button>
-                <button className="secondary-button" onClick={() => setPasswordUpdating(true)}>
+                <button
+                  className="secondary-button"
+                  onClick={() => setPasswordUpdating(true)}
+                >
                   Update Password
                 </button>
                 <button className="danger-button" onClick={handleLogout}>
@@ -301,7 +312,9 @@ const Profile = () => {
                   className="form-input"
                   type="text"
                   value={formData.name || user.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                 />
               </div>
               <div className="form-group">
@@ -310,12 +323,20 @@ const Profile = () => {
                   className="form-input"
                   type="email"
                   value={formData.email || user.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                 />
               </div>
               <div className="button-group">
-                <button className="primary-button" type="submit">Save</button>
-                <button className="secondary-button" type="button" onClick={() => setEditing(false)}>
+                <button className="primary-button" type="submit">
+                  Save
+                </button>
+                <button
+                  className="secondary-button"
+                  type="button"
+                  onClick={() => setEditing(false)}
+                >
                   Cancel
                 </button>
               </div>
@@ -327,14 +348,21 @@ const Profile = () => {
           <div className="profile-section">
             <form onSubmit={handlePasswordUpdate}>
               <h2 className="section-title">Update Password</h2>
-              {passwordError && <p className="error-message">{passwordError}</p>}
+              {passwordError && (
+                <p className="error-message">{passwordError}</p>
+              )}
               <div className="form-group">
                 <label className="form-label">Old Password:</label>
                 <input
                   className="form-input"
                   type="password"
                   value={passwordForm.oldPassword}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, oldPassword: e.target.value })}
+                  onChange={(e) =>
+                    setPasswordForm({
+                      ...passwordForm,
+                      oldPassword: e.target.value,
+                    })
+                  }
                   required
                 />
               </div>
@@ -344,13 +372,24 @@ const Profile = () => {
                   className="form-input"
                   type="password"
                   value={passwordForm.newPassword}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
+                  onChange={(e) =>
+                    setPasswordForm({
+                      ...passwordForm,
+                      newPassword: e.target.value,
+                    })
+                  }
                   required
                 />
               </div>
               <div className="button-group">
-                <button className="primary-button" type="submit">Update Password</button>
-                <button className="secondary-button" type="button" onClick={() => setPasswordUpdating(false)}>
+                <button className="primary-button" type="submit">
+                  Update Password
+                </button>
+                <button
+                  className="secondary-button"
+                  type="button"
+                  onClick={() => setPasswordUpdating(false)}
+                >
                   Cancel
                 </button>
               </div>
@@ -362,7 +401,7 @@ const Profile = () => {
           <h2 className="section-title">My Bookings</h2>
           <ul className="bookings-list">
             {bookings
-              .filter((booking) => booking.status !== 'Cancelled')
+              .filter((booking) => booking.status !== "Cancelled")
               .map((booking) => (
                 <li key={booking._id} className="booking-card">
                   <div className="booking-info">
@@ -370,8 +409,8 @@ const Profile = () => {
                     {booking.travel.name}
                   </div>
                   <div className="booking-info">
-                    <span className="booking-label">Total Price:</span>
-                    ${booking.totalPrice}
+                    <span className="booking-label">Total Price:</span>$
+                    {booking.totalPrice}
                   </div>
                   <div className="booking-info">
                     <span className="booking-label">Status:</span>
@@ -379,7 +418,7 @@ const Profile = () => {
                   </div>
                   <div className="booking-info">
                     <span className="booking-label">Dates:</span>
-                    {new Date(booking.startDate).toLocaleDateString()} to{' '}
+                    {new Date(booking.startDate).toLocaleDateString()} to{" "}
                     {new Date(booking.endDate).toLocaleDateString()}
                   </div>
                   <div className="button-group">

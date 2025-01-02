@@ -104,13 +104,10 @@ const OwnTravels = () => {
       <h1 style={styles.title}>My Travels</h1>
       {error && <p style={styles.error}>{error}</p>}
       {successMessage && <p style={styles.success}>{successMessage}</p>}
-      
-  
+
       <div style={styles.contentWrapper}>
-        
         {/* Left Section: Travel Creation Form */}
         <div style={styles.leftSection}>
-          
           {/* <h2 style={styles.subtitle}>Create or Edit Travel</h2> */}
           <div style={styles.formContainer}>
             <form onSubmit={handleSave} style={styles.form}>
@@ -118,7 +115,9 @@ const OwnTravels = () => {
                 type="text"
                 placeholder="Name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 required
                 style={styles.input}
               />
@@ -177,14 +176,23 @@ const OwnTravels = () => {
             </form>
           </div>
         </div>
-  
+
         {/* Right Section: Travel Table */}
         <div style={styles.rightSection}>
           <table style={styles.table}>
             <thead>
               <tr>
-                {["Name", "Description", "Price", "Available Dates", "Image", "Actions"].map((header) => (
-                  <th key={header} style={styles.th}>{header}</th>
+                {[
+                  "Name",
+                  "Description",
+                  "Price",
+                  "Available Dates",
+                  "Image",
+                  "Actions",
+                ].map((header) => (
+                  <th key={header} style={styles.th}>
+                    {header}
+                  </th>
                 ))}
               </tr>
             </thead>
@@ -230,7 +238,6 @@ const OwnTravels = () => {
       </div>
     </div>
   );
-  
 };
 
 // Modernized CSS-in-JS Styles
@@ -349,6 +356,5 @@ const styles = {
     cursor: "pointer",
   },
 };
-
 
 export default OwnTravels;

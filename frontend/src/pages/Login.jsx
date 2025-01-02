@@ -140,9 +140,7 @@ const Login = () => {
 
       <div className="login-container">
         <h1 className="login-title">Login</h1>
-        {errors.server && (
-          <div className="server-error">{errors.server}</div>
-        )}
+        {errors.server && <div className="server-error">{errors.server}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="form-label" htmlFor="email">
@@ -156,9 +154,7 @@ const Login = () => {
               value={formData.email}
               onChange={handleChange}
             />
-            {errors.email && (
-              <p className="error-message">{errors.email}</p>
-            )}
+            {errors.email && <p className="error-message">{errors.email}</p>}
           </div>
           <div className="form-group">
             <label className="form-label" htmlFor="password">
@@ -176,11 +172,7 @@ const Login = () => {
               <p className="error-message">{errors.password}</p>
             )}
           </div>
-          <button
-            className="submit-button"
-            type="submit"
-            disabled={isLoading}
-          >
+          <button className="submit-button" type="submit" disabled={isLoading}>
             {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
