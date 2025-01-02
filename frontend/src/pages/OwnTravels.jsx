@@ -270,7 +270,7 @@ const styles = {
   },
   leftSection: {
     flex: "1",
-    maxWidth: "35%",
+    maxWidth: "25%",
   },
   formContainer: {
     backgroundColor: "#ffffff",
