@@ -94,25 +94,24 @@ const Travel = () => {
     }
   };
 
-
   const handleSubmitReview = async () => {
     if (!reviewText || rating === "") {
       alert("Please write a review and select a rating.");
       return;
     }
-  
+
     const newReview = {
       travelId: id,
       rating,
       comment: reviewText,
     };
-  
+
     console.log("Submitting review:", newReview); // Debugging
-  
+
     try {
       const response = await API.post(`/reviews`, newReview);
       console.log("Review response:", response); // Debugging
-  
+
       if (response.status === 200 || response.status === 201) {
         setReviews([...reviews, response.data.review]);
         setReviewText(""); // Clear the review text
@@ -130,342 +129,478 @@ const Travel = () => {
     <div>
       <style>
         {`
-          .travel-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-          }
+        .travel-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #f8fafc;
+}
 
-          .travel-header {
-            margin-bottom: 2rem;
-          }
+/* Top section: Image left, Info right */
+.travel-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
 
-          .travel-image {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-          }
+.image-section {
+  width: 99%;
+}
 
-          .travel-title {
-            font-size: 2.5rem;
-            color: #1a1a1a;
-            margin-bottom: 1rem;
-          }
+.travel-image {
+  width: 99%;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 15px;
+}
 
-          .travel-description {
-            font-size: 1.125rem;
-            color: #4b5563;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-          }
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 
-          .travel-price {
-            font-size: 1.5rem;
-            color: #2563eb;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-          }
+.travel-title {
+  font-size: 2.5rem;
+  color: #111827;
+  font-weight: 700;
+}
 
-          .dates-list {
-            list-style: none;
-            padding: 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-          }
+.travel-description {
+  font-size: 1.1rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
 
-          .dates-list li {
-            background-color: #f3f4f6;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            text-align: center;
-          }
+.travel-price {
+  font-size: 1.8rem;
+  color: #0f766e;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  background: #f0fdfa;
+  border-radius: 10px;
+  display: inline-block;
+}
 
-          .section-title {
-            font-size: 1.5rem;
-            color: #1a1a1a;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #e5e7eb;
-          }
+.dates-title {
+  font-size: 1.5rem;
+  color: #111827;
+  margin-top: 1rem;
+}
 
-          .booking-form {
-            background-color: #ffffff;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-          }
+.dates-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+}
 
-          .form-group {
-            margin-bottom: 1rem;
-          }
+.dates-list li {
+  background: #f3f4f6;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
 
-          .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #374151;
-            font-weight: 500;
-          }
+/* Middle section: Reviews left, Booking right */
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
 
-          .form-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #d1d5db;
-            border-radius: 4px;
-            font-size: 1rem;
-          }
+/* Reviews Section */
+.reviews-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
 
-          .form-input:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-          }
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 
-          .book-button {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.15s ease-in-out;
-          }
+.review-card {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 12px;
+}
 
-          .book-button:hover {
-            background-color: #1d4ed8;
-          }
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
 
-          .reviews-section {
-            margin-bottom: 2rem;
-          }
+.reviewer-name {
+  font-weight: 600;
+  color: #111827;
+}
 
-          .review-card {
-            background-color: #ffffff;
-            padding: 1.25rem;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            margin-bottom: 1rem;
-          }
+.review-rating {
+  color: #0f766e;
+  background: #f0fdfa;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+}
 
-          .review-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-          }
+.review-comment {
+  color: #4b5563;
+  line-height: 1.5;
+}
 
-          .reviewer-name {
-            font-weight: 600;
-            color: #1a1a1a;
-          }
+/* Booking Form */
+.booking-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
 
-          .review-rating {
-            color: #2563eb;
-          }
+.section-title {
+  font-size: 1.8rem;
+  color: #111827;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
 
-          .review-form {
-            margin-top: 2rem;
-          }
+.form-group {
+  margin-bottom: 1.5rem;
+}
 
-          .review-textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #d1d5db;
-            border-radius: 4px;
-            min-height: 100px;
-            margin-bottom: 1rem;
-            font-family: inherit;
-          }
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #374151;
+  font-weight: 500;
+}
 
-          .rating-select {
-            padding: 0.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-          }
+.form-input {
+  width: 99%;
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
 
-          .submit-review-button {
-            background-color: #2563eb;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.15s ease-in-out;
-          }
+.form-input:focus {
+  border-color: #0f766e;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+}
 
-          .submit-review-button:hover {
-            background-color: #1d4ed8;
-          }
+.book-button {
+  width: 99%;
+  padding: 1rem;
+  background: #0f766e;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
 
-          .recommendations {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-          }
+.book-button:hover {
+  background: #115e59;
+  transform: translateY(-2px);
+}
 
-          .recommendation-card {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.2s ease-in-out;
-          }
+/* Review Form */
+.review-form {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+}
 
-          .recommendation-card:hover {
-            transform: translateY(-4px);
-          }
+.review-textarea {
+  width: 99%;
+  padding: 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  min-height: 120px;
+  margin-bottom: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.2s;
+}
 
-          .recommendation-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-          }
+.review-textarea:focus {
+  border-color: #0f766e;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+}
 
-          .recommendation-content {
-            padding: 1.25rem;
-          }
+.rating-select {
+  width: 99%;
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  transition: all 0.2s;
+}
 
-          .recommendation-title {
-            font-size: 1.25rem;
-            color: #1a1a1a;
-            margin-bottom: 0.5rem;
-          }
+.submit-review-button {
+  background: #0f766e;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
 
-          .recommendation-link {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 500;
-            display: inline-block;
-            margin-top: 1rem;
-          }
+.submit-review-button:hover {
+  background: #115e59;
+  transform: translateY(-2px);
+}
 
-          .recommendation-link:hover {
-            text-decoration: underline;
-          }
+/* Recommendations Section */
+.recommendations-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
 
-          .divider {
-            height: 1px;
-            background-color: #e5e7eb;
-            margin: 2rem 0;
-          }
+.recommendations {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.recommendation-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s;
+}
+
+.recommendation-card:hover {
+  transform: translateY(-5px);
+}
+
+.recommendation-image {
+  width: 99%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.recommendation-content {
+  padding: 1.5rem;
+}
+
+.recommendation-title {
+  font-size: 1.3rem;
+  color: #111827;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.recommendation-description {
+  color: #4b5563;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.recommendation-price {
+  color: #0f766e;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.recommendation-link {
+  display: inline-block;
+  color: #0f766e;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  background: #f0fdfa;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.recommendation-link:hover {
+  background: #0f766e;
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .travel-header,
+  .content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  
+  .recommendations {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .travel-image {
+    height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .travel-container {
+    padding: 1rem;
+  }
+  
+  .recommendations {
+    grid-template-columns: 1fr;
+  }
+  
+  .travel-title {
+    font-size: 2rem;
+  }
+}
         `}
       </style>
 
       {travel && (
         <div className="travel-container">
+          {/* Top section: Image left, Info right */}
           <div className="travel-header">
-            {travel.image && (
-              <img src={travel.image} alt={travel.name} className="travel-image" />
-            )}
-            <h1 className="travel-title">{travel.name}</h1>
-            <p className="travel-description">{travel.description}</p>
-            <p className="travel-price">Price: ${travel.price}</p>
-            <h3 className="section-title">Available Dates</h3>
-            <ul className="dates-list">
-              {travel.availableDates.map((date, index) => (
-                <li key={index}>{new Date(date).toLocaleDateString()}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="booking-form">
-            <h3 className="section-title">Book Your Trip</h3>
-            <div className="form-group">
-              <label className="form-label">Start Date</label>
-              <input
-                className="form-input"
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">End Date</label>
-              <input
-                className="form-input"
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Number of People</label>
-              <input
-                className="form-input"
-                type="number"
-                min="1"
-                value={numberOfPeople}
-                onChange={(e) => setNumberOfPeople(e.target.value)}
-              />
-            </div>
-            <button className="book-button" onClick={handleBooking}>
-              Book Now
-            </button>
-          </div>
-
-          <div className="reviews-section">
-            <h3 className="section-title">Reviews</h3>
-            <div>
-              {reviews.length > 0 ? (
-                reviews.map((review, index) => (
-                  <div key={index} className="review-card">
-                    <div className="review-header">
-                      <span className="reviewer-name">
-                        {review.user?.name || "You"}
-                      </span>
-                      <span className="review-rating">{review.rating} Stars</span>
-                    </div>
-                    <p>{review.comment}</p>
-                  </div>
-                ))
-              ) : (
-                <p>No reviews yet.</p>
+            <div className="image-section">
+              {travel.image && (
+                <img
+                  src={travel.image}
+                  alt={travel.name}
+                  className="travel-image"
+                />
               )}
             </div>
+            <div className="info-section">
+              <h1 className="travel-title">{travel.name}</h1>
+              <p className="travel-description">{travel.description}</p>
+              <p className="travel-price">Price: ${travel.price}</p>
+              <h3 className="dates-title">Available Dates</h3>
+              <ul className="dates-list">
+                {travel.availableDates.map((date, index) => (
+                  <li key={index}>{new Date(date).toLocaleDateString()}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
-            <div className="review-form">
-              <textarea
-                className="review-textarea"
-                value={reviewText}
-                onChange={(e) => setReviewText(e.target.value)}
-                placeholder="Write your review..."
-              />
-              <div className="form-group">
-                <label className="form-label">Rating</label>
-                <select
-                  className="rating-select"
-                  value={rating}
-                  onChange={(e) => setRating(e.target.value)}
-                >
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <option key={star} value={star}>
-                      {star} Star{star > 1 ? "s" : ""}
-                    </option>
-                  ))}
-                </select>
+          {/* Middle section: Reviews left, Booking right */}
+          <div className="content-wrapper">
+            {/* Reviews Section */}
+            <div className="reviews-section">
+              <h3 className="section-title">Reviews</h3>
+              <div className="reviews-list">
+                {reviews.length > 0 ? (
+                  reviews.map((review, index) => (
+                    <div key={index} className="review-card">
+                      <div className="review-header">
+                        <span className="reviewer-name">
+                          {review.user?.name || "Anonymous"}
+                        </span>
+                        <span className="review-rating">
+                          {review.rating} Stars
+                        </span>
+                      </div>
+                      <p className="review-comment">{review.comment}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="no-reviews">No reviews yet.</p>
+                )}
               </div>
-              <button className="submit-review-button" onClick={handleSubmitReview}>
-                Submit Review
+
+              <div className="review-form">
+                <textarea
+                  className="review-textarea"
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  placeholder="Write your review..."
+                />
+                <div className="form-group">
+                  <label className="form-label">Rating</label>
+                  <select
+                    className="rating-select"
+                    value={rating}
+                    onChange={(e) => setRating(e.target.value)}
+                  >
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <option key={star} value={star}>
+                        {star} Star{star > 1 ? "s" : ""}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <button
+                  className="submit-review-button"
+                  onClick={handleSubmitReview}
+                >
+                  Submit Review
+                </button>
+              </div>
+            </div>
+
+            {/* Booking Section */}
+            <div className="booking-form">
+              <h3 className="section-title">Book Your Trip</h3>
+              <div className="form-group">
+                <label className="form-label">Start Date</label>
+                <input
+                  className="form-input"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">End Date</label>
+                <input
+                  className="form-input"
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Number of People</label>
+                <input
+                  className="form-input"
+                  type="number"
+                  min="1"
+                  value={numberOfPeople}
+                  onChange={(e) => setNumberOfPeople(e.target.value)}
+                />
+              </div>
+              <button className="book-button" onClick={handleBooking}>
+                Book Now
               </button>
             </div>
           </div>
 
-          <div className="divider" />
-
-          <div>
+          {/* Bottom section: Recommendations */}
+          <div className="recommendations-section">
             <h3 className="section-title">Recommended Travels</h3>
             <div className="recommendations">
               {recommendedTravels.length > 0 ? (
                 recommendedTravels.slice(0, 3).map((recommendedTravel) => (
-                  <div key={recommendedTravel._id} className="recommendation-card">
+                  <div
+                    key={recommendedTravel._id}
+                    className="recommendation-card"
+                  >
                     {recommendedTravel.image && (
                       <img
                         src={recommendedTravel.image}
@@ -477,8 +612,12 @@ const Travel = () => {
                       <h2 className="recommendation-title">
                         {recommendedTravel.name}
                       </h2>
-                      <p>{recommendedTravel.description}</p>
-                      <p className="travel-price">${recommendedTravel.price}</p>
+                      <p className="recommendation-description">
+                        {recommendedTravel.description}
+                      </p>
+                      <p className="recommendation-price">
+                        ${recommendedTravel.price}
+                      </p>
                       <Link
                         to={`/travels/${recommendedTravel._id}`}
                         className="recommendation-link"
@@ -489,7 +628,9 @@ const Travel = () => {
                   </div>
                 ))
               ) : (
-                <p>No recommendations available</p>
+                <p className="no-recommendations">
+                  No recommendations available
+                </p>
               )}
             </div>
           </div>
